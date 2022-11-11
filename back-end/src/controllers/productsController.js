@@ -1,14 +1,14 @@
 require('dotenv').config();
 const productsService = require('../services/productsService');
 
-const postProducts = async (req, res, next) => {
+const getAllProducts = async (req, res, next) => {
     const { authorization } = req.headers;
 
     if (!authorization) {
         return next({ name: 'Unauthorized', message: 'Unauthorized' });
     }
 
-    const product = await productsService.postProducts();
+    const product = await productsService.getAllProducts();
 
     if (!product) {
         return next({ name: 'NotFound', message: 'Not found' });
@@ -17,5 +17,5 @@ const postProducts = async (req, res, next) => {
 };
 
 module.exports = {
-    postProducts,
+    getAllProducts,
 };

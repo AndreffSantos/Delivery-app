@@ -1,33 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import AppContext from '../context/Context';
 import Input from '../componentes/Input';
 import Button from '../componentes/Button';
-import { singIn } from '../services/API';
+import { login } from '../services/API';
 
 function LoginPage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({ email: '', password: '' });
-  const [errorMessage, setErrorMessage] = useState({
+  const { setUser } = React.useContext(AppContext);
+  const [loginData, setLogin] = React.useState({ email: '', password: '' });
+  const [errorMessage, setErrorMessage] = React.useState({
     logged: false,
     message: '',
   });
 
   React.useEffect(() => {
-    if (JSON.parse(localStorage.getItem('user'))) {
-      navigate('/customer/products');
+    const userStorage = JSON.parse(localStorage.getItem('user'));
+    if (userStorage) {
+      setUser(userStorage);
+      navigate(`/${userStorage.role}`);
     }
-  });
+  }, []);
 
   const handleChange = ({ target: { name, value } }) => {
-    setUser({ ...user, [name]: value });
+    setLogin({ ...loginData, [name]: value });
   };
 
   const handleClick = async () => {
     try {
-      const response = await singIn(user);
-      const { name, email, role, token } = response;
-      localStorage.setItem('user', JSON.stringify({ name, email, role, token }));
-      navigate(`/${response.role}/products`);
+      const response = await login(loginData);
+      const { id, name, email, role, token } = response;
+      localStorage.setItem('user', JSON.stringify({ id, name, email, role, token }));
+      setUser({ id, name, email, role, token });
+      navigate(`/${response.role}`);
     } catch (error) {
       setErrorMessage({
         logged: true,
@@ -48,7 +53,7 @@ function LoginPage() {
   };
 
   const loginIsValid = () => {
-    const { email, password } = user;
+    const { email, password } = loginData;
     return emailIsValid(email) && passwordIsValid(password);
   };
 
@@ -60,7 +65,7 @@ function LoginPage() {
         name="email"
         dataTestId="common_login__input-email"
         type="email"
-        value={ user.email }
+        value={ loginData.email }
         onChange={ handleChange }
         placeholder="E-mail"
         label="Login"
@@ -70,7 +75,7 @@ function LoginPage() {
         name="password"
         dataTestId="common_login__input-password"
         type="password"
-        value={ user.password }
+        value={ loginData.password }
         onChange={ handleChange }
         placeholder="Senha"
         label="Senha"

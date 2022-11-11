@@ -5,9 +5,10 @@ import Table from '../componentes/Table';
 import Input from '../componentes/Input';
 import { getSellers, postOrder } from '../services/API';
 import Button from '../componentes/Button';
+import AppContext from '../context/Context';
 
 export default function CheckoutPage() {
-  const [user, setUser] = React.useState({});
+  const { user } = React.useContext(AppContext);
   const [cart, setCart] = React.useState([]);
   const [sellers, setSellers] = React.useState([]);
   const [selectedSeller, setSelected] = React.useState();
@@ -20,7 +21,6 @@ export default function CheckoutPage() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('user')));
     setCart(JSON.parse(localStorage.getItem('cart')));
     getSellers().then((response) => {
       setSellers(response);
@@ -39,6 +39,7 @@ export default function CheckoutPage() {
   };
 
   const postOrderAndNavigate = () => {
+    localStorage.removeItem('cart');
     const { email, token } = user;
     const { id } = selectedSeller;
     const { address, number } = Address;
@@ -61,7 +62,6 @@ export default function CheckoutPage() {
         button1Click={ () => navigate('/customer/products') }
         textButton2="Meus Pedidos"
         button2Click={ () => navigate('/customer/orders') }
-        nomeUsuario={ user.name }
       />
       <section>
         <Table

@@ -9,12 +9,17 @@ export default function Table({
   dataArray,
   hasButton,
   onClick,
+  statusEdit,
 }) {
   return (
     <table>
       <thead>
         {
-          page === 'order_details' ? <OrderDetailsLine order={ order } /> : ''
+          page === 'order_details' ? <OrderDetailsLine
+            order={ order }
+            preparing={ statusEdit }
+            dispatch={ statusEdit }
+          /> : null
         }
         <tr>
           <th>Item</th>
@@ -23,7 +28,7 @@ export default function Table({
           <th>Valor Unitário</th>
           <th>Sub-total</th>
           {
-            hasButton ? <th>Remover Item</th> : ''
+            hasButton ? <th>Remover Item</th> : null
           }
         </tr>
       </thead>
@@ -48,6 +53,7 @@ export default function Table({
 Table.defaultProps = {
   order: {},
   onClick: () => console.log(),
+  statusEdit: () => console.log(),
 };
 
 Table.propTypes = {
@@ -56,4 +62,5 @@ Table.propTypes = {
   dataArray: PropTypes.arrayOf(PropTypes.shape).isRequired,
   hasButton: PropTypes.bool.isRequired,
   onClick: PropTypes.func,
+  statusEdit: PropTypes.func,
 };

@@ -23,11 +23,12 @@ export default function Button(
 
 Button.defaultProps = {
   isDisabled: false,
+  onClick: () => console.log(),
 };
 
 Button.propTypes = {
   textButton: string.isRequired,
   dataTestId: string.isRequired,
-  onClick: func.isRequired,
+  onClick: func,
   isDisabled: bool,
 };

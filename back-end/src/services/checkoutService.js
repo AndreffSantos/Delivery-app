@@ -95,4 +95,8 @@ const createSaleProducts = async ({ sellerId, totalPrice, deliveryAddress,
     }
 };
 
-module.exports = { createSaleProducts, getAllSale, getSaleById };
+module.exports = {
+    createSaleProducts,
+    getAllSale,
+    getSaleById,
+};

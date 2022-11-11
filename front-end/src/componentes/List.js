@@ -1,4 +1,6 @@
+import React from 'react';
 import PropTypes from 'prop-types';
+import AppContext from '../context/Context';
 import Button from './Button';
 
 export default function List({
@@ -8,26 +10,29 @@ export default function List({
   hasButton,
   onClick,
 }) {
+  const { user } = React.useContext(AppContext);
   return (
     <tr>
-      <td data-testid={ `customer_${page}__element-order-table-item-number-${index}` }>
+      <td
+        data-testid={ `${user.role}_${page}__element-order-table-item-number-${index}` }
+      >
         { index + 1 }
       </td>
-      <td data-testid={ `customer_${page}__element-order-table-name-${index}` }>
+      <td data-testid={ `${user.role}_${page}__element-order-table-name-${index}` }>
         { product.name }
       </td>
 
-      <td data-testid={ `customer_${page}__element-order-table-quantity-${index}` }>
+      <td data-testid={ `${user.role}_${page}__element-order-table-quantity-${index}` }>
         {
           hasButton ? product.quantity : product.salesProducts.quantity
         }
       </td>
 
-      <td data-testid={ `customer_${page}__element-order-table-unit-price-${index}` }>
+      <td data-testid={ `${user.role}_${page}__element-order-table-unit-price-${index}` }>
         { product.price.replace(/\./, ',') }
       </td>
 
-      <td data-testid={ `customer_${page}__element-order-table-sub-total-${index}` }>
+      <td data-testid={ `${user.role}_${page}__element-order-table-sub-total-${index}` }>
         {
           hasButton ? (product.price * product.quantity).toFixed(2).replace(/\./, ',')
             : (product.price * product.salesProducts.quantity)
@@ -39,14 +44,13 @@ export default function List({
         hasButton ? (
           <td>
             <Button
-              dataTestId={ `customer_${page}__element-order-table-remove-${index}` }
+              dataTestId={ `${user.role}_${page}__element-order-table-remove-${index}` }
               textButton="Remover"
               onClick={ () => onClick(product.id) }
             />
           </td>
         ) : ''
       }
-
     </tr>
   );
 }
@@ -58,14 +62,14 @@ List.defaultProps = {
 List.propTypes = {
   page: PropTypes.string.isRequired,
   product: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    quantity: PropTypes.number.isRequired,
-    id: PropTypes.number.isRequired,
-    price: PropTypes.string.isRequired,
-    urlImage: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    quantity: PropTypes.number,
+    id: PropTypes.number,
+    price: PropTypes.string,
+    urlImage: PropTypes.string,
     salesProducts: PropTypes.shape({
-      quantity: PropTypes.number.isRequired,
-    }).isRequired,
+      quantity: PropTypes.number,
+    }),
   }).isRequired,
   index: PropTypes.number.isRequired,
   hasButton: PropTypes.bool.isRequired,

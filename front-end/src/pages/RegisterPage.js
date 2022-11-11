@@ -6,20 +6,20 @@ import { register } from '../services/API';
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({ name: '', email: '', password: '' });
+  const [newUser, setNewUser] = useState({ name: '', email: '', password: '' });
   const [errorMessage, setErrorMessage] = useState({
     logged: false,
     message: '',
   });
 
   const handleChange = ({ target: { name, value } }) => {
-    setUser({ ...user, [name]: value });
+    setNewUser({ ...newUser, [name]: value });
   };
 
   const handleClick = async () => {
     try {
-      const response = await register(user);
-      navigate(`/${response.role}/products`);
+      const response = await register(newUser);
+      navigate(`/${response.role}`);
     } catch (error) {
       setErrorMessage({
         logged: true,
@@ -45,7 +45,7 @@ function RegisterPage() {
   };
 
   const registerIsValid = () => {
-    const { name, email, password } = user;
+    const { name, email, password } = newUser;
     return nameIsValid(name) && emailIsValid(email) && passwordIsValid(password);
   };
 
@@ -57,7 +57,7 @@ function RegisterPage() {
         name="name"
         dataTestId="common_register__input-name"
         type="text"
-        value={ user.name }
+        value={ newUser.name }
         onChange={ handleChange }
         placeholder="Nome"
         label="Nome"
@@ -67,7 +67,7 @@ function RegisterPage() {
         name="email"
         dataTestId="common_register__input-email"
         type="email"
-        value={ user.email }
+        value={ newUser.email }
         onChange={ handleChange }
         placeholder="E-mail"
         label="E-mail"
@@ -77,7 +77,7 @@ function RegisterPage() {
         name="password"
         dataTestId="common_register__input-password"
         type="password"
-        value={ user.password }
+        value={ newUser.password }
         onChange={ handleChange }
         placeholder="Senha"
         label="Senha"

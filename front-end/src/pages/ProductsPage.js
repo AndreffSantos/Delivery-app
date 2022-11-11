@@ -2,17 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../componentes/Card';
 import NavBar from '../componentes/NavBar';
+import AppContext from '../context/Context';
 import { getProducts } from '../services/API';
 
 export default function ProductsPage() {
-  const [user, setUser] = React.useState({});
+  const { user } = React.useContext(AppContext);
   const [products, setProducts] = React.useState([]);
   const [price, setPrice] = React.useState(0);
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('user')));
-
     getProducts(user.token).then((response) => {
       setProducts(response.map((product) => ({ ...product, quantity: 0 })));
     });
